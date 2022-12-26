@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if catagory %}
+        {{catagory.description|truncatewords:155 }}
+    {% else %}
+        Welcome to SHOPY INDUSTRIES where you can find everything you want.
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if catagory %}
+        {{catagory.name}} - SHOPY Industries
+    {% else %}
+       See our new collections-SHOPY Industries
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if catagory %}
+     <div>
+         <div class="row my_row_class">
+             <div class="mx_auto">
+             <p><a href="{% url 'shop:allProCat' %}">our product collections</a></p>
+              </div>
+         </div>
+     </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if catagory %}
+    <img class="my_image" src="{{catagory.image.url}}" alt="{{catagory.name}}">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">{{catagory.name}}</h1>
+    <p class="text-justify">{{catagory.description}}</p>
+
+</div>
+{% else %}
+<div>
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1250px">
+</div>
+<br>
+<div>
+     <h1 class="text-center my_title">Our Products collections</h1>
+    <p class="text-justify">"On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distin</p>
+</div>
+    {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12  col-md-4  col-md-12 col-lg-3">
+            <div class="card-text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="150px" height="150px"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto my_search_text">
+       {% if products.paginator.num_pages > 1 %}
+<hr>
+        <div class="text-center"></div>
+        {% for pg in products.paginator.page_range %}
+        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+     {% endfor %}
+    </div>
+    {% endif %}<hr>
+</div><br>
+{% endblock %}
+
+
